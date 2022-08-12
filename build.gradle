@@ -1,0 +1,50 @@
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.4.34")                                     //el plugin necesario que se necesita para el script de gradle
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'net.serenity-bdd.aggregator'                                                             //Sirve para agregar la carpeta de serenity bdd en el menu de gradle que contienen unas tareas para ejecutar
+apply plugin: 'idea'                                                                                    //Para Indicarle a gradle que el proyecto esta hecho en intelliJ y asi sepa como compilar mas rapido y optimizado
+
+group 'org.practice'
+version '1.0'
+
+
+tasks.withType(JavaCompile){
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    //Lo que se conoce como junit solo que cambio el nombre
+
+    //Complements
+    implementation("org.slf4j:slf4j-api:1.7.36")                                                          //estas de los org es para el manejo de los logs y evitar que salga errores
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+    implementation group: 'io.rest-assured', name: 'json-schema-validator', version: '5.0.1'              //Para identificar los cambios de un response
+
+    //serenity dependencies
+    implementation "net.serenity-bdd:serenity-cucumber:3.3.0"                                             //Permite trabajar bdd y asi crear los feature
+    implementation "net.serenity-bdd:serenity-junit5:3.3.0"                                                //genera compatibilidad entre junit y serenity
+    implementation "net.serenity-bdd:serenity-core:3.2.4"
+    implementation "net.serenity-bdd:serenity-screenplay:3.2.4"                                           //Da el soporte al patron screenplay
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:3.2.4"                                 //Para hacer el uso del webdriver ya que esta embebido selenium dentro de screenplay
+
+    testImplementation 'io.cucumber:cucumber-java:7.5.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.5.0'
+    //For APIs
+    implementation "net.serenity-bdd:serenity-screenplay-rest:3.3.0"
+    implementation "net.serenity-bdd:serenity-rest-assured:3.3.0"
+}
+
+gradle.startParameter.continueOnFailure = true //Cuando haya un fallo, no pare, siga con la sig prueba
